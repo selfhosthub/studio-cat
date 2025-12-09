@@ -1,0 +1,33 @@
+{
+  "version": "1.0.0",
+  "packages": [
+    {
+      "id": "core",
+      "display_name": "Core",
+      "version": "1.0.0",
+      "tier": "basic",
+      "category": "core",
+      "description": "Built-in workflow utilities for data transformation, control flow, HTTP requests, and webhooks",
+      "services_preview": ["Incoming Webhook", "Call Webhook", "Set Fields", "HTTP POST"],
+      "requires": [],
+      "credential_provider": null,
+      "download_url": "https://raw.githubusercontent.com/kickin6/studio-cat/main/packages/core-1.0.0.zip",
+      "latest_url": null,
+      "requires_token": false
+    },
+    {
+      "id": "leonardo-ai",
+      "display_name": "Leonardo",
+      "version": "1.0.0",
+      "tier": "advanced",
+      "category": "ai",
+      "description": "AI-powered image generation service",
+      "services_preview": ["Text to Image", "Text to Image (Webhook)"],
+      "requires": [],
+      "credential_provider": null,
+      "download_url": "https://github.com/kickin6/studio-mark/releases/download/v1.0.0/leonardo-ai-1.0.0.zip",
+      "latest_url": "https://github.com/kickin6/studio-mark/releases/download/main/leonardo-ai-main.zip",
+      "requires_token": true
+    }
+  ]
+}

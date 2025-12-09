@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "welcome-webhook",
+      "display_name": "Welcome Webhook Handler",
+      "version": "1.0.0",
+      "tier": "basic",
+      "category": "core",
+      "description": "Simple webhook that responds with a welcome message. Great for testing.",
+      "requires": ["core"],
+      "author": "SelfHostHub",
+      "download_url": "https://raw.githubusercontent.com/kickin6/studio-cat/main/templates/welcome-webhook.json"
+    },
+    {
+      "id": "httpbin-echo-flow",
+      "display_name": "HTTPBin Echo Flow",
+      "version": "1.0.0",
+      "tier": "basic",
+      "category": "core",
+      "description": "Test workflow demonstrating async request patterns using HTTPBin echo service. Two-step flow with delay simulation.",
+      "requires": ["core"],
+      "author": "SelfHostHub",
+      "download_url": "https://raw.githubusercontent.com/kickin6/studio-cat/main/templates/httpbin-echo-flow.json"
+    },
+    {
+      "id": "leonardo-image-pipeline",
+      "display_name": "Leonardo Image Pipeline",
+      "version": "1.0.0",
+      "tier": "advanced",
+      "category": "ai",
+      "description": "Generate images with Leonardo AI and process results via webhook callback.",
+      "requires": ["core", "leonardo-ai"],
+      "author": "SelfHostHub",
+      "download_url": "https://raw.githubusercontent.com/kickin6/studio-mark/main/templates/leonardo-image-pipeline.json",
+      "requires_token": true
+    }
+  ]
+}

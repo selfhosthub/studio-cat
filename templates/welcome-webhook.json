@@ -1,0 +1,76 @@
+{
+  "name": "Welcome Webhook Handler",
+  "description": "Simple webhook that responds with a welcome message. Great for testing.",
+  "version": "1.0.0",
+  "author": "SelfHostHub",
+  "steps": {
+    "step_1": {
+      "name": "Receive Webhook",
+      "description": "Listen for incoming webhook requests",
+      "type": "trigger",
+      "depends_on": [],
+      "ui_config": {
+        "position": {
+          "x": 100,
+          "y": 200
+        }
+      },
+      "job": {
+        "service_type": "core",
+        "provider_id": "core",
+        "service_id": "incoming_webhook",
+        "parameters": {}
+      },
+      "timeout": 30,
+      "outputs": {
+        "payload": {
+          "path": "body",
+          "type": "object",
+          "description": "The webhook request body"
+        },
+        "headers": {
+          "path": "headers",
+          "type": "object",
+          "description": "Request headers"
+        }
+      }
+    },
+    "step_2": {
+      "name": "Set Welcome Response",
+      "description": "Prepare the welcome message response",
+      "type": "task",
+      "depends_on": ["step_1"],
+      "ui_config": {
+        "position": {
+          "x": 400,
+          "y": 200
+        }
+      },
+      "job": {
+        "service_type": "core",
+        "provider_id": "core",
+        "service_id": "set_fields",
+        "parameters": {
+          "fields": {
+            "message": "Welcome to SelfHostHub Studio!",
+            "status": "success",
+            "received_at": "{{step_1.outputs.headers.date}}"
+          }
+        }
+      },
+      "timeout": 30,
+      "outputs": {
+        "message": {
+          "path": "message",
+          "type": "string",
+          "description": "Welcome message"
+        },
+        "status": {
+          "path": "status",
+          "type": "string",
+          "description": "Response status"
+        }
+      }
+    }
+  }
+}

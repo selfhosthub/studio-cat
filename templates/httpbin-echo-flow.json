@@ -1,0 +1,92 @@
+{
+  "name": "HTTPBin Echo Flow",
+  "description": "Test workflow demonstrating async request patterns using HTTPBin echo service",
+  "version": "1.0.0",
+  "author": "SelfHostHub",
+  "steps": {
+    "step_1": {
+      "name": "Initiate Async Request",
+      "description": "Send request to external service (httpbin echo)",
+      "type": "task",
+      "depends_on": [],
+      "ui_config": {
+        "position": {
+          "x": 100,
+          "y": 200
+        }
+      },
+      "job": {
+        "service_type": "core",
+        "provider_id": "httpbin",
+        "service_id": "http.post",
+        "parameters": {
+          "url": "https://httpbin.org/post",
+          "body": {
+            "message": "Process this asynchronously",
+            "job_id": "test-job-123"
+          }
+        }
+      },
+      "timeout": 30,
+      "outputs": {
+        "job_id": {
+          "path": "json.job_id",
+          "type": "string",
+          "description": "Unique job identifier"
+        },
+        "request_url": {
+          "path": "url",
+          "type": "string",
+          "description": "The URL that was called"
+        },
+        "timestamp": {
+          "path": "headers.Date",
+          "type": "string",
+          "description": "Request timestamp"
+        }
+      }
+    },
+    "step_2": {
+      "name": "Simulate Async Response",
+      "description": "Simulates waiting for async completion (2s delay)",
+      "type": "task",
+      "depends_on": ["step_1"],
+      "ui_config": {
+        "position": {
+          "x": 400,
+          "y": 200
+        }
+      },
+      "job": {
+        "service_type": "core",
+        "provider_id": "httpbin",
+        "service_id": "http.post",
+        "parameters": {
+          "url": "https://httpbin.org/delay/2",
+          "body": {
+            "status": "completed",
+            "result": "Async job finished"
+          }
+        }
+      },
+      "timeout": 60,
+      "outputs": {
+        "status": {
+          "path": "json.status",
+          "type": "string",
+          "description": "Completion status"
+        },
+        "processing_time_ms": {
+          "path": "json.delay",
+          "type": "number",
+          "description": "Processing time in milliseconds"
+        },
+        "success": {
+          "path": "json.success",
+          "type": "boolean",
+          "description": "Whether the operation succeeded"
+        }
+      }
+    }
+  }
+}

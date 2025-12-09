@@ -7,8 +7,8 @@
       "version": "1.0.0",
       "tier": "basic",
       "category": "core",
-      "description": "Built-in workflow utilities for data transformation, control flow, HTTP requests, and webhooks",
-      "services_preview": ["Incoming Webhook", "Call Webhook", "Set Fields", "HTTP POST"],
+      "description": "Built-in workflow utilities for data transformation, control flow, and HTTP requests",
+      "services_preview": ["Set Fields", "HTTP POST"],
       "requires": [],
       "credential_provider": null,
       "requires_token": false,
@@ -17,7 +17,7 @@
           "version": "1.0.0",
           "download_url": "https://raw.githubusercontent.com/selfhosthub/studio-cat/main/packages/core-1.0.0.zip",
           "release_date": "2024-12-08",
-          "changelog": "Initial release with webhook, HTTP, and data transformation services"
+          "changelog": "Initial release with HTTP request and data transformation services"
         }
       ],
       "bug_report_url": "https://github.com/selfhosthub/studio-cat/issues/new"

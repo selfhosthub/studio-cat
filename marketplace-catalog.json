@@ -36,7 +36,7 @@
       "versions": [
         {
           "version": "1.0.0",
-          "download_url": "https://raw.githubusercontent.com/selfhosthub/studio-mark/main/packages/leonardo-ai-1.0.0.zip",
+          "download_url": "https://api.github.com/repos/selfhosthub/studio-mark/contents/packages/leonardo-ai-1.0.0.zip?ref=main",
           "release_date": "2024-12-08",
           "changelog": "Initial release with text-to-image generation"
         }

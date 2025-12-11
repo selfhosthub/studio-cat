@@ -4,15 +4,21 @@
     {
       "id": "core",
       "display_name": "Core",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "tier": "basic",
       "category": "core",
       "description": "Built-in workflow utilities for data transformation, control flow, and HTTP requests",
-      "services_preview": ["Set Fields", "HTTP POST"],
+      "services_preview": ["HTTPBin Echo", "HTTP POST", "Set Fields"],
       "requires": [],
       "credential_provider": null,
       "requires_token": false,
       "versions": [
+        {
+          "version": "1.1.0",
+          "download_url": "https://raw.githubusercontent.com/selfhosthub/studio-cat/main/packages/core-1.1.0.zip",
+          "release_date": "2025-12-10",
+          "changelog": "Added HTTPBin Echo service for testing workflows"
+        },
         {
           "version": "1.0.0",
           "download_url": "https://raw.githubusercontent.com/selfhosthub/studio-cat/main/packages/core-1.0.0.zip",
@@ -25,7 +31,7 @@
     {
       "id": "leonardo-ai",
       "display_name": "Leonardo",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "tier": "advanced",
       "category": "ai",
       "description": "AI-powered image generation using Leonardo.ai",
@@ -34,6 +40,12 @@
       "credential_provider": null,
       "requires_token": true,
       "versions": [
+        {
+          "version": "1.1.0",
+          "download_url": "https://github.com/selfhosthub/studio-mark/releases/download/v1.1.0/leonardo-ai-1.1.0.zip",
+          "release_date": "2025-12-10",
+          "changelog": "Added orchestrator_hints for webhook service (enables pause/resume)"
+        },
         {
           "version": "1.0.0",
           "download_url": "https://github.com/selfhosthub/studio-mark/releases/download/v1.0.0/leonardo-ai-1.0.0.zip",

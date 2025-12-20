@@ -131,89 +131,25 @@ Use Docker when you want the simplest stable deployment.
 
 RunPod is useful when you want a single node with GPU and persistent storage.
 
-### Recommended shape
+**Note:** Use the official Self-Host Studio template on RunPod. Pre-built images are provided — no need to build your own.
 
-* One container running API (and optionally embedded Postgres/Redis)
-* A persistent network volume mounted at `/workspace`
-
-### Build and push image
-
-```bash
-docker build -f Dockerfile.runpod -t your-registry/studio-api:runpod .
-docker push your-registry/studio-api:runpod
-```
-
-### RunPod secrets
-
-Create secrets in the RunPod dashboard (names are up to you). Typical:
-
-* `postgres_password`
-* `jwt_secret_key`
-* `worker_shared_secret`
-* `runpod_api_key` (only if you need it)
-
-Generate secrets with:
-
-```bash
-openssl rand -hex 32
-```
-
-### Typical environment variables
-
-```bash
-ENV=production
-DEBUG=false
-HOST=0.0.0.0
-PORT=8000
-
-POSTGRES_PASSWORD={{ RUNPOD_SECRET_postgres_password }}
-DATABASE_URL=postgresql://postgres:{{ RUNPOD_SECRET_postgres_password }}@localhost:5432/selfhost_studio
-REDIS_URL=redis://localhost:6379/0
-JWT_SECRET_KEY={{ RUNPOD_SECRET_jwt_secret_key }}
-WORKER_SHARED_SECRET={{ RUNPOD_SECRET_worker_shared_secret }}
-```
-
-### First boot warning
-
-If the deployment seeds default credentials (example: `admin@localhost / admin`), force a password change immediately.
-
-### Data persistence
-
-If you use a network volume, keep these paths on it:
-
-* PostgreSQL data directory (if embedded)
-* workspace files (uploads/artifacts)
+Detailed deployment guide coming soon.
 
 ---
 
 ## Kubernetes deployment
 
-Kubernetes is the “real production” path: separate API, workers, web, DB, redis.
+Kubernetes is the path for production scaling with separate API, workers, web, database, and redis.
 
-### What you actually need
+**Note:** Detailed Kubernetes deployment guide coming soon.
 
-* Ingress controller (nginx/traefik)
-* TLS (cert-manager or external TLS termination)
-* Postgres + Redis (managed or in-cluster)
-* Persistent volumes for:
+Key concepts:
 
-  * database (if in-cluster)
-  * workspace files
-
-### Secrets and config
-
-Put secrets in a Secret, and non-sensitive config in a ConfigMap.
-
-Secrets commonly include:
-
-* `DATABASE_URL`
-* `REDIS_URL`
-* `JWT_SECRET_KEY`
-* `WORKER_SHARED_SECRET`
-
-### Health probes
-
-Use `/health` for liveness/readiness probes on the API.
+* Ingress controller for routing
+* TLS termination (cert-manager or load balancer)
+* Managed or in-cluster Postgres + Redis
+* Persistent volumes for database and workspace files
+* Secrets for sensitive configuration
 
 ---
 

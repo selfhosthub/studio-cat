@@ -1,510 +1,385 @@
-# Admin Guide
+# Admins Guide
 
-Organization administration guide - managing users, credentials, branding, and billing.
+Manage your organization: team access, secrets/credentials, branding, billing, limits, and webhooks.
 
----
-
-## Table of Contents
-
-- [Organization Management](#organization-management)
-- [User Management](#user-management)
-- [Secrets & Credentials](#secrets--credentials)
-- [Audit Logs](#audit-logs)
-- [Branding](#branding)
-- [Billing & Subscription](#billing--subscription)
-- [Limits & Usage](#limits--usage)
+If you’re new: **invite a user**, **add provider credentials**, then have them run a simple workflow.
 
 ---
 
-## Organization Management
+## Common tasks
 
-### Organization Dashboard (`/organization/manage`)
-
-| Tab | Description |
-|-----|-------------|
-| Overview | Organization summary |
-| Details | Name, slug, website, logo |
-| Users | Member management |
-| Settings | Configuration options |
-| Billing | Subscription and invoices |
-| Branding | Custom branding |
-| Limits | Usage limits display |
-
-### Organization Status
-
-Organizations have a status that determines their access level:
-
-| Status | Description | Capabilities |
-|--------|-------------|--------------|
-| **pending_approval** | Awaiting admin approval | Build templates/workflows, limited storage |
-| **active** | Full access | All features based on plan limits |
-| **suspended** | Restricted access | Read-only, no executions |
-
-#### Status Transitions
-
-- **New Registration** → `pending_approval` (if auto-activate disabled) or `active` (if auto-activate enabled)
-- **Admin Approval** → `pending_approval` → `active`
-- **Billing Issue** → `active` → `suspended`
-- **Policy Violation** → `active` → `suspended`
-- **Issue Resolved** → `suspended` → `active`
-
-#### Pending Organization Limits
-
-Organizations in `pending_approval` status have restricted limits:
-
-| Limit | Default |
-|-------|---------|
-| Max Users | 1 (creator only) |
-| Max Executions | 0 (cannot run workflows) |
-| Max Storage | 50 MB |
-
-These defaults are configured in platform registration settings.
-
-### Organization Details
-
-| Field | Description |
-|-------|-------------|
-| Organization name | Display name |
-| Organization slug | URL-safe identifier |
-| Website | Organization website URL |
-| Logo | Organization logo upload |
-| Status | Current organization status |
-| Activated at | When the organization was activated |
-| Activated by | Who activated the organization |
-
-### Organization Settings (`/organization/manage/settings`)
-
-Configure organization-wide preferences.
-
-#### Images & Thumbnails
-
-| Setting | Description |
-|---------|-------------|
-| **Show image thumbnails** | Display thumbnail previews for image files in the Files page and instance views. Disable to reduce bandwidth on slower connections. |
-
-#### Display Settings
-
-| Setting | Options | Description |
-|---------|---------|-------------|
-| **Resource Card Size** | Small, Medium, Large | Controls the size of file cards in grid view throughout the application |
-
-These settings affect all users in the organization.
+- Invite a teammate → [Invite a user](#invite-a-user)
+- Promote someone to admin → [Change a user’s role](#change-a-users-role)
+- Remove access quickly → [Deactivate a user](#deactivate-a-user)
+- Add an API key / OAuth connection → [Add provider credentials](#add-provider-credentials)
+- Store a reusable secret (tokens, URLs) → [Create an organization secret](#create-an-organization-secret)
+- Rotate keys safely → [Rotate a secret or credential](#rotate-a-secret-or-credential)
+- Set logo + colors → [Branding](#branding)
+- Find “who changed what” → [Audit logs](#audit-logs)
+- Check limits / usage → [Limits and usage](#limits-and-usage)
+- Create an inbound webhook URL → [Webhooks](#webhooks)
 
 ---
 
-## User Management
+## Organization overview
 
-### Managing Users (`/organization/manage/users`)
+Your org settings live at **Organization → Manage**.
 
-| Column | Description |
-|--------|-------------|
-| Username | User's username |
-| Email | User's email |
-| First/Last Name | Full name |
-| Role | User role (dropdown for admins) |
-| Status | Active/Inactive toggle |
-| Actions | Edit, Remove buttons |
+- Dashboard: `/organization/manage`
+- Settings: `/organization/manage/settings`
+- Users: `/organization/manage/users`
+- Branding: `/organization/manage/branding`
+- Billing: `/organization/manage/billing`
+- Limits: `/organization/manage/limits`
 
-### Inviting Users
+### Update organization details
 
-Click "Invite User" to add new members:
+Use this when you want a clean name/slug/logo for your team.
 
-| Field | Description |
-|-------|-------------|
-| Email | User's email address |
-| Username | Unique username |
-| Password | Initial password |
-| Role | user, admin, super_admin |
+1. Open **Organization → Manage** (`/organization/manage`)
+2. Go to **Details**
+3. Update:
+   - **Name** (display name)
+   - **Slug** (URL-safe identifier)
+   - **Website** (optional)
+   - **Logo** (optional)
+4. Save
 
-### User Roles
+**Tip:** The slug often appears in webhook URLs and links. Choose it early and avoid changing it later.
 
-| Role | Permissions |
-|------|-------------|
-| **User** | Create/execute workflows, view own data, use services |
-| **Admin** | All User permissions + manage org resources, members, credentials |
-| **Super Admin** | All Admin permissions + system-wide access, infrastructure |
+### Organization settings
 
-### Editing Users
+Org settings affect everyone.
 
-- Update name, email, role
-- Toggle active status
-- Reset password
+- **Show image thumbnails**  
+  Turn off on slow networks or when you want to reduce bandwidth.
+
+- **Resource card size**  
+  Controls how big file cards appear (grid views across the app).
 
 ---
 
-## Secrets & Credentials
+## Team management
 
-### Secrets Page (`/secrets`)
+### Invite a user
 
-Two types of secrets:
+1. Go to **Users** (`/organization/manage/users`)
+2. Click **Invite User**
+3. Fill in:
+   - Email
+   - Username
+   - Initial password
+   - Role (start with **User** unless you have a reason not to)
+4. Save
 
-1. **Organization Secrets** - General-purpose secrets
-2. **Provider Credentials** - API keys for service providers
+They can log in immediately and start building/running workflows.
 
-### Organization Secrets
+### Change a user’s role
 
-| Field | Description |
-|-------|-------------|
-| Name | Secret identifier |
-| Type | Classification |
-| Description | Help text |
-| Value | The secret (encrypted) |
-| Expiration | Optional expiry date |
-| Status | Active/Inactive |
+Use this when someone needs access to org-level settings or secrets.
 
-### Creating Secrets
+1. Go to **Users** (`/organization/manage/users`)
+2. Find the user
+3. Change the **Role** dropdown
+4. Save
 
-1. Click "New Secret"
-2. Enter name and type
-3. Add secret value (masked)
-4. Optional: Set expiration date
+Role guide:
+- **User**: build and run workflows
+- **Admin**: manage org resources, members, and credentials
+- **Super Admin**: system-wide access (infrastructure + global settings)
+
+### Deactivate a user
+
+This is the fastest, safest offboarding option.
+
+1. Go to **Users** (`/organization/manage/users`)
+2. Toggle **Active** → off
+3. Save
+
+Deactivation is usually better than deletion because it preserves history (instances, audit events, ownership).
+
+### Reset a password
+
+1. Go to **Users** (`/organization/manage/users`)
+2. Edit the user
+3. Set a new password
+4. Save
+
+If you’re doing this due to suspected compromise, rotate relevant secrets/credentials too.
+
+---
+
+## Secrets and credentials
+
+Studio stores secrets encrypted and scoped to your organization.
+
+There are two buckets:
+
+- **Organization secrets**: reusable values you reference across workflows (tokens, URLs, shared secrets).
+- **Provider credentials**: logins/API keys for external services (OpenAI, Google, Leonardo, etc).
+
+### Create an organization secret
+
+Use this for values you want to reuse in many workflows.
+
+1. Go to **Secrets** (`/secrets`)
+2. Open **Organization Secrets**
+3. Click **New Secret**
+4. Set:
+   - **Name** (example: `SLACK_WEBHOOK_URL`, `WEBHOOK_SHARED_SECRET`)
+   - **Type** (optional classification)
+   - **Description** (helpful later)
+   - **Value**
+   - **Expiration** (optional)
 5. Save
 
-### Provider Credentials
+Naming tip: use uppercase + underscores. It’s easier to spot in mapping UIs and configs.
 
-Provider credentials authenticate workflows with external services.
+### Add provider credentials
 
-| Field | Description |
-|-------|-------------|
-| Provider | Service provider |
-| Credential type | API_KEY, OAUTH2, etc. |
-| Created | Creation date |
-| Expiration | Expiry date |
+Use this for provider authentication (most common reason workflows fail early).
 
-### Credential Types
+1. Go to **Secrets** (`/secrets`)
+2. Open **Provider Credentials**
+3. Choose a provider
+4. Enter what it asks for (API key / OAuth / etc.)
+5. Save
 
-| Type | Description |
-|------|-------------|
-| API_KEY | Simple API key |
-| ACCESS_KEY | Cloud provider keys |
-| OAUTH2 | OAuth 2.0 flows |
-| JWT | JSON Web Token |
-| BASIC | HTTP Basic Auth |
-| CUSTOM | Custom authentication |
+If a user sees **“No credentials configured”** in a step, this is the fix most of the time.
 
-### Security Features
+### Rotate a secret or credential
 
-| Feature | Description |
-|---------|-------------|
-| AES encryption | Encrypted at rest |
-| Organization scoped | No sharing between orgs |
-| Expiration tracking | Monitor credential expiry |
-| Never exposed | Hidden in API responses |
-| Audit trail | Last used tracking |
+Do this any time:
+- someone leaves the team
+- you suspect a leak
+- a provider key was shared in plaintext
+- a credential is expiring
 
----
+Safe rotation sequence:
 
-## Audit Logs
+1. Create a **new** key/token in the external provider
+2. Update the secret/credential in Studio
+3. Run a small test workflow that uses it
+4. Revoke the old key in the external provider
 
-### Audit Logs Page (`/audit`)
+### Expiration and hygiene
 
-Monitor all security-related and administrative events within your organization.
-
-| Column | Description |
-|--------|-------------|
-| Event | Action performed (Created, Updated, Deleted, etc.) |
-| Resource | Type and name of affected resource |
-| Actor | Who performed the action |
-| Severity | info, warning, or critical |
-| Category | security, configuration, access, or audit |
-| Timestamp | When the event occurred |
-
-### Event Categories
-
-| Category | Events Tracked |
-|----------|----------------|
-| **Security** | Secret reveals, credential changes, login attempts |
-| **Configuration** | User role changes, organization updates |
-| **Access** | Resource views and downloads |
-| **Audit** | Viewing the audit log itself |
-
-### Severity Levels
-
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **Info** | Normal operations | Secret created, user invited |
-| **Warning** | Attention needed | Failed login attempt |
-| **Critical** | Security concerns | Secret value revealed, multiple failed logins |
-
-### Filtering Events
-
-Filter the audit log by:
-- **Category** - Security, Configuration, Access, Audit
-- **Severity** - Info, Warning, Critical
-- **Resource Type** - Secrets, Credentials, Users, Workflows, etc.
-- **Search** - Free text search across event details
-
-### Event Details
-
-Expand any event to view:
-- Full change details (what was modified)
-- Metadata (IP address, user agent, etc.)
-- Resource and organization IDs
-
-### Visibility Rules
-
-| Role | Can View |
-|------|----------|
-| **User** | No access to audit logs |
-| **Admin** | Organization's events only |
-| **Super Admin** | All events (all orgs + system events) |
-
-### Security Best Practices
-
-1. **Regular review** - Check audit logs weekly for anomalies
-2. **Monitor critical events** - Set up alerts for security events
-3. **Track secret access** - Know who reveals secret values
-4. **Review failed logins** - Investigate repeated failures
-
-### Audit API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/audit/` | GET | List audit events with filters |
-| `/api/v1/audit/system` | GET | System events (super_admin only) |
-| `/api/v1/audit/resource/{type}/{id}` | GET | Resource history |
-| `/api/v1/audit/actor/{id}` | GET | Actor history |
-
----
-
-## Branding
-
-### Branding Page (`/organization/manage/branding`)
-
-Customize your organization's appearance.
-
-| Setting | Description |
-|---------|-------------|
-| Logo | Organization logo |
-| Primary color | Theme accent color |
-| Secondary color | Supporting color |
-| Tagline | Marketing tagline |
-| Hero gradient | Landing page gradient |
-| Header styling | Header customization |
-
-### Custom Domain Landing Pages
-
-Organizations can have branded landing pages via custom domains (e.g., `workflows.mycompany.com`).
-
-**Setup:**
-1. Configure custom domain in organization settings
-2. Set up Cloudflare tunnel (see Operators Guide)
-3. Branding applies automatically to custom domain
-
-### Public Branding API
-
-Unauthenticated endpoint for custom domain branding:
-```
-GET /api/v1/public/branding
-```
-
-Returns branding config based on request domain.
-
----
-
-## Billing & Subscription
-
-### Billing Page (`/organization/manage/billing`)
-
-| Tab | Content |
-|-----|---------|
-| Current Plan | Subscription details |
-| Invoices | Invoice history |
-| Payments | Payment history |
-
-### Invoices
-
-| Column | Description |
-|--------|-------------|
-| Invoice number | Unique identifier |
-| Amount | Invoice amount |
-| Status | paid/pending/overdue |
-| Date | Invoice date |
-| Download | PDF download |
-
-### Payments
-
-| Column | Description |
-|--------|-------------|
-| Payment ID | Transaction ID |
-| Amount | Payment amount |
-| Status | completed/pending/failed |
-| Date | Payment date |
-
-### Subscription Management
-
-- View current plan
-- Change plan
-- Cancel subscription
-- View usage against limits
-
-### Payment Integrations
-
-Studio supports:
-- **Stripe** - Credit card payments
-- **LemonSqueezy** - Alternative payment processor
-
-Configure in organization billing settings.
-
----
-
-## Limits & Usage
-
-### Limits Page (`/organization/manage/limits`)
-
-| Limit Type | Description |
-|------------|-------------|
-| Workflows | Maximum workflow count |
-| Users | Maximum team members |
-| Storage | Maximum storage space |
-| API calls | Rate limits |
-
-### Usage Indicators
-
-Progress bars show current usage vs. limits:
-- Green: Below 70%
-- Yellow: 70-90%
-- Red: Above 90%
-
-### Limit Types
-
-| Type | Behavior |
-|------|----------|
-| Soft limits | Warning only |
-| Hard limits | Enforcement at boundary |
-| Metered limits | Tracked and reported |
-
-### Grace Period
-
-Organizations exceeding limits receive a grace period before enforcement:
-- Automatic grace period granted
-- Monitoring in super admin dashboard
-- Blocking after grace expires
+- Use expiration dates when you can.
+- Put real descriptions on secrets (“Used by: invoice webhook workflow”).
+- Prefer provider credentials for provider auth (better organization and UI support).
 
 ---
 
 ## Webhooks
 
-### Webhooks Page (`/webhooks`)
+Webhooks let outside systems trigger a workflow.
 
-Manage incoming webhook endpoints.
+### Create a webhook
 
-| Field | Description |
-|-------|-------------|
-| Name | Webhook identifier |
-| URL slug | Unique path |
-| Workflow | Associated workflow |
-| Status | Active/Inactive |
-| Auth type | Authentication method |
-| Created | Creation date |
+1. Go to **Webhooks** (`/webhooks`)
+2. Click **New Webhook**
+3. Choose the workflow to trigger
+4. Pick an authentication type (see below)
+5. Save
 
-### Webhook URL Pattern
+Studio will show:
+- A full URL you can copy
+- A secret or token (depending on auth type)
+- Controls to regenerate or disable
+
+### Webhook URL format
 
 ```
+
 /webhooks/incoming/{org_slug}/{webhook_slug}
+
 ```
 
-**Understanding the URL:**
-- `{org_slug}` - Your organization's URL-safe identifier (found in Organization → Details). Example: `acme-corp`
-- `{webhook_slug}` - Auto-generated from webhook name, or manually set. Example: `process-orders`
+Example:
 
-Full example URL: `https://studio.example.com/webhooks/incoming/acme-corp/process-orders`
+```
 
-### Webhook Authentication
+[https://studio.example.com/webhooks/incoming/acme-corp/process-orders](https://studio.example.com/webhooks/incoming/acme-corp/process-orders)
 
-| Type | Description |
-|------|-------------|
-| NONE | No authentication |
-| HMAC_SHA256 | HMAC signature validation |
-| BEARER_TOKEN | Bearer token auth |
-| API_KEY | API key header auth |
+```
 
-### Webhook Details
+### Webhook authentication
 
-Expandable details include:
-- Full webhook URL (with copy button)
-- Secret (with show/hide toggle)
-- Regenerate secret button
-- Delete webhook button
+Choose one:
 
----
+- **HMAC_SHA256** (best): sender signs payload, Studio verifies signature
+- **BEARER_TOKEN**: sender includes `Authorization: Bearer <token>`
+- **API_KEY**: sender includes a known header value
+- **NONE**: only for trusted internal networks
 
-## Best Practices
+If you’re unsure, use **HMAC_SHA256**.
 
-### Security
+### Regenerate a webhook secret
 
-1. **Rotate credentials regularly** - Use expiration dates
-2. **Use least privilege** - Assign minimum necessary role
-3. **Monitor usage** - Review audit logs
-4. **Enable 2FA** - For admin accounts
+Regenerating breaks existing senders until you update them.
 
-### Organization
-
-1. **Clear naming** - Use descriptive workflow/template names
-2. **Document credentials** - Add descriptions to secrets
-3. **Regular cleanup** - Archive unused workflows
-4. **Monitor limits** - Stay within usage limits
-
-### Team Management
-
-1. **Onboarding** - Create users with User role first
-2. **Gradual access** - Promote to Admin when needed
-3. **Off-boarding** - Deactivate (don't delete) departing members
-4. **Audit roles** - Review role assignments periodically
+1. Open the webhook
+2. Click **Regenerate secret**
+3. Update the sending system with the new secret
+4. Send a test request
 
 ---
 
-## Admin API Endpoints
+## Branding
 
-### Organization
+Branding controls how your org appears (especially for landing pages and custom domains).
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/organizations/{id}` | PATCH | Update organization |
-| `/api/v1/organizations/{id}/members` | GET | List members |
-| `/api/v1/organizations/{id}/members` | POST | Add member |
-| `/api/v1/organizations/{id}/activate` | POST | Activate organization (super_admin) |
-| `/api/v1/organizations/{id}/suspend` | POST | Suspend organization (super_admin) |
-| `/api/v1/organizations/{id}/set-pending` | POST | Set to pending_approval (super_admin) |
+- Branding page: `/organization/manage/branding`
 
-### Credentials
+Typical settings:
+- Logo
+- Primary/secondary colors
+- Tagline
+- Hero gradient / header styling
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/providers/{id}/credentials` | POST | Create credential |
-| `/api/v1/providers/{id}/credentials` | GET | List credentials |
-| `/api/v1/providers/credentials/{id}` | PATCH | Update credential |
+### Custom domains
 
-### Secrets
+If your deployment supports custom domains, org branding usually applies automatically.
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/organizations/secrets` | POST | Create secret |
-| `/api/v1/organizations/secrets/{id}` | PATCH | Update secret |
-| `/api/v1/organizations/secrets/{id}` | DELETE | Delete secret |
+A typical setup:
+1. Operator configures custom-domain routing (often via Cloudflare Tunnel / reverse proxy)
+2. You set the org’s custom domain in org settings
+3. Landing pages render with your org branding
 
-### Webhooks
+### Public branding API
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/webhooks` | POST | Create webhook |
-| `/api/v1/webhooks/{id}` | PUT | Update webhook |
-| `/api/v1/webhooks/{id}/regenerate-secret` | POST | Regenerate secret |
+Some deployments expose a public branding endpoint used by landing pages:
 
-### Files
+```
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/files` | GET | List organization files |
-| `/api/v1/files/{id}` | GET | Get file details |
-| `/api/v1/files/{id}` | DELETE | Permanently delete file (admin only) |
-| `/api/v1/files/{id}/download` | GET | Download file content |
-| `/api/v1/files/{id}/preview` | GET | Get thumbnail preview |
+GET /api/v1/public/branding
 
-**Note:** Deleting a file permanently removes both the file and its thumbnail from storage. This action cannot be undone.
+```
+
+It usually returns branding based on the request domain (Host header).
 
 ---
 
-## Next Steps
+## Billing and subscription
 
-- **[User Guide](/docs/user)** - Using workflows, templates, and instances
+Billing lives at `/organization/manage/billing`.
+
+Typical sections:
+- Current plan
+- Invoices
+- Payment history
+
+### Invoices
+
+From the invoice list you can usually:
+- view invoice number
+- see amount/status/date
+- download a PDF (if supported)
+
+### Cancel or change plan
+
+If plan changes are enabled:
+- changing plan updates limits and access
+- cancellation usually keeps access until the end of the current billing period
+
+Exact behavior depends on operator configuration.
+
+---
+
+## Limits and usage
+
+Limits live at `/organization/manage/limits`.
+
+You’ll typically see:
+- workflows
+- users
+- storage
+- API calls / rate limits
+
+### How to read the usage bars
+
+- **Green**: comfortable
+- **Yellow**: approaching a cap
+- **Red**: at/over the limit
+
+### Soft limits vs hard limits
+
+- **Soft**: warning only
+- **Hard**: enforcement (blocks actions when exceeded)
+
+### Grace periods
+
+Some deployments allow a grace period after you exceed a limit before enforcement starts.
+
+If you’re using marketplace “advanced” packages with token gating, align enforcement here with your product rules (what stops working and when).
+
+---
+
+## Audit logs
+
+Audit logs are your “who did what” feed.
+
+If your deployment enables it, look for an audit page (often `/audit` or within org management).
+
+### Find a specific event fast
+
+Start with filters:
+- time range
+- actor (user)
+- event category
+- severity (info/warn/error)
+
+Then open the event detail to see:
+- what changed
+- previous vs new values (when available)
+- request metadata (when enabled)
+
+### Security best practices
+
+- Audit admin role changes
+- Audit credential creation/updates
+- Watch for repeated failed login attempts (if tracked)
+- Export audit data periodically if you have compliance requirements
+
+---
+
+## Quick reference
+
+### Routes
+
+- Org dashboard: `/organization/manage`
+- Org settings: `/organization/manage/settings`
+- Users: `/organization/manage/users`
+- Branding: `/organization/manage/branding`
+- Billing: `/organization/manage/billing`
+- Limits: `/organization/manage/limits`
+- Secrets: `/secrets`
+- Webhooks: `/webhooks`
+
+### Admin API endpoints (if you use the API)
+
+Organization / members:
+- `PATCH /api/v1/organizations/{id}`
+- `GET /api/v1/organizations/{id}/members`
+- `POST /api/v1/organizations/{id}/members`
+
+Secrets:
+- `POST /api/v1/organizations/secrets`
+- `PATCH /api/v1/organizations/secrets/{id}`
+- `DELETE /api/v1/organizations/secrets/{id}`
+
+Webhooks:
+- `POST /api/v1/webhooks`
+- `PUT /api/v1/webhooks/{id}`
+- `POST /api/v1/webhooks/{id}/regenerate-secret`
+
+Files (admin-only actions may apply):
+- `GET /api/v1/files`
+- `DELETE /api/v1/files/{id}`
+
+---
+
+## Next steps
+
+- **Users Guide**: build workflows, run instances, debug failures
+- **Operators Guide**: deploy, secure, monitor, backup, upgrade

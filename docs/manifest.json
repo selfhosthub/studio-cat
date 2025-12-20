@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-01-15T00:00:00Z",
+  "docs": {
+    "user": {
+      "title": "User Guide",
+      "description": "Using workflows, templates, instances, and the visual editor",
+      "file": "user.md",
+      "icon": "book-open",
+      "public": true
+    },
+    "admin": {
+      "title": "Admin Guide",
+      "description": "Managing users, organizations, credentials, and billing",
+      "file": "admin.md",
+      "icon": "settings",
+      "public": true
+    },
+    "operator": {
+      "title": "Operator Guide",
+      "description": "Deployment, infrastructure, networking, and system configuration",
+      "file": "operator.md",
+      "icon": "server",
+      "public": false
+    }
+  }
+}

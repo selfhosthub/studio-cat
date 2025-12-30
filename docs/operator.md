@@ -282,6 +282,32 @@ kubectl logs -n studio deployment/studio-api --tail=200
 
 Set `DEBUG=false` in production to reduce noise.
 
+### Worker logging configuration
+
+Workers support structured logging with environment variables:
+
+| Variable | Values | Default | Notes |
+|----------|--------|---------|-------|
+| `LOG_LEVEL` | DEBUG, INFO, WARNING, ERROR | INFO | Controls verbosity |
+| `LOG_FORMAT` | pretty, json | pretty | Use `json` for ELK/Prometheus |
+| `LOG_PREFIX` | any string | auto-detect | Override container name in logs |
+| `LOG_COLORS` | true, false | true | Disable for non-TTY output |
+
+**Pretty format** (development):
+```
+shs-worker-comfyui (172.17.0.2) | 15:33:19.086 | INFO | Job completed
+```
+
+**JSON format** (production/ELK):
+```json
+{"timestamp":"2024-12-30T15:30:45.123Z","level":"INFO","service":"shs-worker-comfyui","host":"172.17.0.2","message":"Job completed","job_id":"abc123"}
+```
+
+For production with log aggregation (ELK, Grafana Loki, etc.):
+```bash
+LOG_FORMAT=json LOG_LEVEL=INFO
+```
+
 ### What to monitor
 
 * request latency
@@ -431,6 +457,15 @@ openssl rand -hex 32
 | `CREATE_TABLES`           |          varies | Disable in production if migrations are managed |
 | `CORS_ORIGINS`            |             `*` | Restrict in production                          |
 | `CLOUDFLARE_TUNNEL_TOKEN` |               - | For custom domains                              |
+
+### Worker-specific variables
+
+| Variable     | Typical default | Notes                                    |
+| ------------ | --------------: | ---------------------------------------- |
+| `LOG_LEVEL`  |          `INFO` | DEBUG, INFO, WARNING, ERROR              |
+| `LOG_FORMAT` |        `pretty` | `json` for production/ELK                |
+| `LOG_PREFIX` |     auto-detect | Override container name in log prefix    |
+| `LOG_COLORS` |          `true` | Disable for non-TTY environments         |
 
 ---
 

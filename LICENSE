@@ -2,25 +2,26 @@ LICENSE
 
 Copyright (c) 2025 Kawika Ohumukini. All rights reserved.
 
-PERMITTED USE:
-- Deploy and run this software for your own business operations
-- Sell access to services you build using this software
-- Modify the software for your own internal use
-- Submit contributions back to this project
+PERMITTED USE
+You may:
+- Deploy and operate this software for your business
+- Provide services to your customers using this software  
+- Charge customers for access to your hosted instance
+- Deliver workflows, automations, or integrations as products or services
+- Provide consulting, installation, or support services
+- Modify the software for your own use
+- Contribute to this project
 
-RESTRICTIONS:
-- Redistribute this software, modified or unmodified
-- Offer this software as a hosted/managed platform for third parties
-- White-label, rebrand, or resell this software
+RESTRICTIONS  
+You may not:
+- Build a platform where customers pay to receive hosted instances of this 
+  software (the software itself cannot be the primary product)
+- Redistribute, sublicense, or sell copies of this software
+- White-label, rebrand, or fork this software for resale
 - Remove or alter copyright notices
 
-CONTRIBUTIONS:
-By submitting a contribution, you assign all rights to the project
-maintainers (currently Kawika Ohumukini, or successor entity).
+CONTRIBUTIONS
+Contributions are assigned to the project maintainers.
 
-NO WARRANTY:
-PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY OR FITNESS
-FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THIS
-SOFTWARE.
+NO WARRANTY
+Provided "as is" without warranty. Not liable for damages.
